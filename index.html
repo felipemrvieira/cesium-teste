@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Include the CesiumJS JavaScript and CSS files -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.91/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.91/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    // Your access token can be found at: https://cesium.com/ion/tokens.
+    // Replace `your_access_token` with your Cesium ion access token.
+
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ODA2OWFjMi01OTU1LTQ5NGQtOGIyZS0yZWQzODI1MTQ2MTEiLCJpZCI6ODQ2NTEsImlhdCI6MTY0NjQxNzU5M30.2oyCjqzXktuaDQBNMnHAR6LcstQVg4YQUy0MRoX2Dxw';
+
+    // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+    const viewer = new Cesium.CesiumWidget('cesiumContainer', {
+      // terrainProvider: Cesium.createWorldTerrain()
+    });    
+    const scene = viewer.scene;
+    const canvas = viewer.canvas;
+  
+
+    // disable the default event handlers
+    // scene.screenSpaceCameraController.enableRotate = true;
+    // scene.screenSpaceCameraController.enableTranslate = true;
+    // scene.screenSpaceCameraController.enableZoom = true;
+    // scene.screenSpaceCameraController.enableTilt = true;
+    // scene.screenSpaceCameraController.enableLook = true;
+
+
+    const provider = new Cesium.WebMapServiceImageryProvider({
+      url : 'https://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer/WMSServer',
+      layers : '0',
+      proxy: new Cesium.DefaultProxy('/proxy/')
+    });
+
+    viewer.imageryLayers.addImageryProvider(provider);
+
+    const handler = new Cesium.ScreenSpaceEventHandler(canvas);
+    handler.setInputAction(function (movement) {
+      console.log("Clickevent");
+
+      const worldPosition = viewer.scene.pickPosition(movement.position);
+      console.log(worldPosition);
+     
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    
+
+  </script>
+ </div>
+</body>
+</html>
